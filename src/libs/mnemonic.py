@@ -214,5 +214,35 @@ def generate_mnemonic(ent, filepath):
     return mnemonic
 
 
+def reverse_mnemonic(mnemonic, filepath):
+    """
+    Get initial seed from mnemonic and wordlist.
+
+    :param mnemonic: mnemonic as a string
+    :param filepath: filepath of the wordlist
+    :return: seed as a hex string
+    """
+    if type(mnemonic) is not str:
+        raise ValueError("mnemonic has to be a string; the given type was {}".format(type(mnemonic)))
+
+    mnemonic_list = mnemonic.split(" ")
+    possible_ms_values = [x // 32 * 33 // 11 for x in POSSIBLE_ENT_VALUES]
+    if len(mnemonic_list) not in possible_ms_values:
+        raise ValueError("number of words in the mnemonic has to be in {}; the given number of words was {}".format(
+            possible_ms_values, len(mnemonic_list)))
+
+    wordlist = get_wordlist(filepath)
+    indices = [wordlist.index(w) for w in mnemonic_list]
+
+    indices_bytes = [i.to_bytes(length=2, byteorder="big") for i in indices]
+
+    indices_bits = [bytes_to_bits(b)[-11:] for b in indices_bytes]
+    bit_string = "".join(indices_bits)
+    cs = len(bit_string) // 33
+    bit_string = bit_string[:len(bit_string) - cs]
+
+    return int(bit_string, 2).to_bytes(length=len(bit_string) // 8, byteorder="big").hex()
+
+
 if __name__ == "__main__":
     print(generate_mnemonic(128, "../../wordlists/english.txt"))

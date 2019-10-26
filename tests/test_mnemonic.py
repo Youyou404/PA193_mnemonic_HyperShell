@@ -1,7 +1,7 @@
 import unittest
-from mnemonic.libs.mnemonic import get_mnemonic_from_entropy_hex, get_mnemonic_from_entropy_bytes, reverse_mnemonic
 import json
 import os
+from mnemonic.mnemonic import get_mnemonic_from_entropy_hex, get_mnemonic_from_entropy_bytes, reverse_mnemonic
 
 
 class MnemonicTest(unittest.TestCase):

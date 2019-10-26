@@ -3,4 +3,6 @@ python:
     - "2.7"
     - "3.7"
 
-script: python3 -m unittest discover tests
+script:
+    - flake8 --config=config/flake8
+    - python3 -m unittest discover tests

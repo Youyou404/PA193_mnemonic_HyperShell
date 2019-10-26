@@ -1,4 +1,8 @@
-from hashlib import sha256
+from hashlib import sha256, sha512
+from pbkdf2 import PBKDF2
+import hmac
+import unicodedata
+
 
 POSSIBLE_ENT_VALUES = [128, 160, 192, 224, 256]
 

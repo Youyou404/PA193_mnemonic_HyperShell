@@ -247,4 +247,7 @@ def reverse_mnemonic(mnemonic, filepath):
 
 
 if __name__ == "__main__":
-    print(generate_mnemonic(128, "../../wordlists/english.txt"))
+    import os
+
+    wordlist_path = os.path.join(os.path.dirname(__file__), "../../wordlists/english.txt")
+    print(generate_mnemonic(128, wordlist_path))

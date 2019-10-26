@@ -1,26 +1,30 @@
 import unittest
 from mnemonic.libs.mnemonic import get_mnemonic_from_entropy_hex, get_mnemonic_from_entropy_bytes, reverse_mnemonic
 import json
+import os
 
 
 class MnemonicTest(unittest.TestCase):
 
     def test_english_vectors(self):
-        with open("vectors/english.json", "r") as f:
+        vectors_path = os.path.join(os.path.dirname(__file__), "vectors/english.json")
+        wordlist_path = os.path.join(os.path.dirname(__file__), "../wordlists/english.txt")
+
+        with open(vectors_path, "r") as f:
             for v in json.loads(f.read())["english"]:
                 # test get_mnemonic_from_entropy_hex
                 expected = v[1]
-                actual = get_mnemonic_from_entropy_hex(v[0], "../wordlists/english.txt")
+                actual = get_mnemonic_from_entropy_hex(v[0], wordlist_path)
                 self.assertEqual(expected, actual)
 
                 # test get_mnemonic_from_entropy_bytes
                 expected = v[1]
-                actual = get_mnemonic_from_entropy_bytes(bytes.fromhex(v[0]), "../wordlists/english.txt")
+                actual = get_mnemonic_from_entropy_bytes(bytes.fromhex(v[0]), wordlist_path)
                 self.assertEqual(expected, actual)
 
                 # test reverse_mnemonic
                 expected = v[0]
-                actual = reverse_mnemonic(v[1], "../wordlists/english.txt")
+                actual = reverse_mnemonic(v[1], wordlist_path)
                 self.assertEqual(expected, actual)
 
 

@@ -7,5 +7,5 @@ before_install:
     - sudo apt-get install flake8
 
 script:
-    - flake8 --config=config/flake8
+    - flake8 --config=config/flake8 .
     - python3 -m unittest discover tests

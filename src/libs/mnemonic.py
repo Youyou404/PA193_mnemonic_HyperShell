@@ -137,7 +137,7 @@ def compose_mnemonic(indices, wordlist):
 
     :param indices: list of ints with values between 0 and 2047
     :param wordlist: list of 2048 strings
-    :return: mnemonic as a list of words
+    :return: mnemonic
     """
     for i in indices:
         if type(i) is not int or not (0 <= i <= 2047):
@@ -150,16 +150,37 @@ def compose_mnemonic(indices, wordlist):
         raise ValueError("wordlist has to have length 2048; the given wordlists had length {}".format(len(wordlist)))
 
     mnemonic_list = [wordlist[i] for i in indices]
-    return mnemonic_list
+    mnemonic = " ".join(mnemonic_list)
+    return mnemonic
 
 
-def get_mnemonic(entropy_hex, filepath):
+def get_mnemonic_from_entropy_bytes(entropy_bytes, filepath):
+    """
+    Get the mnemonic for the given entropy and wordlist.
+
+    :param entropy_bytes: bytes encoding the entropy bytes
+    :param filepath: filepath of the wordlist
+    :return: mnemonic
+    """
+    if type(entropy_bytes) is not bytes:
+        raise ValueError("entropy_bytes has to be bytes object; the given type was {}".format(type(entropy_bytes)))
+    if len(entropy_bytes) * 8 not in POSSIBLE_ENT_VALUES:
+        raise ValueError(
+            "eight multiple of entropy_bytes length has to be in {}; "
+            "the eight multiple of length of the given values was {}".format(
+                POSSIBLE_ENT_VALUES, 8 * len(entropy_bytes)))
+
+    mnemonic = compose_mnemonic(get_indices_from_entropy(entropy_bytes), get_wordlist(filepath))
+    return mnemonic
+
+
+def get_mnemonic_from_entropy_hex(entropy_hex, filepath):
     """
     Get the mnemonic for the given entropy and wordlist.
 
     :param entropy_hex: hexstring encoding the entropy bytes
     :param filepath: filepath of the wordlist
-    :return: mnemonic as a list of words
+    :return: mnemonic
     """
     try:
         int(entropy_hex, 16)
@@ -171,8 +192,8 @@ def get_mnemonic(entropy_hex, filepath):
             "the four multiple of the length of the given value was {}".format(
                 POSSIBLE_ENT_VALUES, 4 * len(entropy_hex)))
 
-    mnemonic_list = compose_mnemonic(get_indices_from_entropy(bytes.fromhex(entropy_hex)), get_wordlist(filepath))
-    return mnemonic_list
+    mnemonic = get_mnemonic_from_entropy_bytes(bytes.fromhex(entropy_hex), filepath)
+    return mnemonic
 
 
 def generate_mnemonic(ent, filepath):
@@ -181,7 +202,7 @@ def generate_mnemonic(ent, filepath):
 
     :param ent: entropy length; type int; possible values from POSSIBLE_ENT_VALUES
     :param filepath: filepath of the wordlist
-    :return: mnemonic as a list of words
+    :return: mnemonic
     """
     if type(ent) is not int:
         raise ValueError("ent (entropy length) has to be int; the given type was {}".format(type(ent)))
@@ -189,8 +210,8 @@ def generate_mnemonic(ent, filepath):
         raise ValueError(
             "ent (entropy length) has to be in {}; the given values was {}".format(POSSIBLE_ENT_VALUES, ent))
 
-    mnemonic_list = compose_mnemonic(generate_indices(ent), get_wordlist(filepath))
-    return mnemonic_list
+    mnemonic = compose_mnemonic(generate_indices(ent), get_wordlist(filepath))
+    return mnemonic
 
 
 if __name__ == "__main__":

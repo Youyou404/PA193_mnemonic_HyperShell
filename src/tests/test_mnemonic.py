@@ -1,5 +1,5 @@
 import unittest
-from src.libs.mnemonic import get_mnemonic
+from src.libs.mnemonic import get_mnemonic_from_entropy_hex
 import json
 
 
@@ -9,5 +9,5 @@ class MnemonicTest(unittest.TestCase):
         with open("vectors/english.json", "r") as f:
             for v in json.loads(f.read())["english"]:
                 expected = v[1]
-                actual = " ".join(get_mnemonic(v[0], "../../wordlists/english.txt"))
+                actual = get_mnemonic_from_entropy_hex(v[0], "../../wordlists/english.txt")
                 self.assertEqual(expected, actual)

@@ -216,11 +216,11 @@ def generate_mnemonic(ent, filepath):
 
 def reverse_mnemonic(mnemonic, filepath):
     """
-    Get initial seed from mnemonic and wordlist.
+    Get initial entropy from mnemonic and wordlist.
 
     :param mnemonic: mnemonic as a string
     :param filepath: filepath of the wordlist
-    :return: seed as a hex string
+    :return: entropy as a hex string
     """
     if type(mnemonic) is not str:
         raise ValueError("mnemonic has to be a string; the given type was {}".format(type(mnemonic)))
@@ -232,6 +232,8 @@ def reverse_mnemonic(mnemonic, filepath):
             possible_ms_values, len(mnemonic_list)))
 
     wordlist = get_wordlist(filepath)
+    if len(wordlist) != 2048:
+        raise ValueError("the wordlist has to have 2048 words; the given wordlist had {} words".format(len(wordlist)))
     indices = [wordlist.index(w) for w in mnemonic_list]
 
     indices_bytes = [i.to_bytes(length=2, byteorder="big") for i in indices]

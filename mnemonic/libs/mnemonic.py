@@ -1,4 +1,3 @@
-import os
 from hashlib import sha256
 
 POSSIBLE_ENT_VALUES = [128, 160, 192, 224, 256]

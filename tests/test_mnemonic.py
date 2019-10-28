@@ -1,7 +1,8 @@
 import unittest
 import json
 import os
-from mnemonic.mnemonic import get_mnemonic_from_entropy_hex, get_mnemonic_from_entropy_bytes, reverse_mnemonic
+from mnemonic.mnemonic import get_mnemonic_from_entropy_hex, get_mnemonic_from_entropy_bytes, reverse_mnemonic, \
+    generate_seed
 
 
 class MnemonicTest(unittest.TestCase):
@@ -30,7 +31,7 @@ class MnemonicTest(unittest.TestCase):
                 # test generate_seed
                 expected = v[2]
                 actual = generate_seed(v[1])
-                self.assertEqual(expected, actuel)
+                self.assertEqual(expected, actual)
 
 
 if __name__ == "__main__":

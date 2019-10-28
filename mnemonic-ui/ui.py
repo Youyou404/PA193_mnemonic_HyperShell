@@ -1,5 +1,6 @@
 import argparse
-from mnemonic.mnemonic import POSSIBLE_ENT_VALUES, generate_entropy_bytes, get_mnemonic_from_entropy_bytes, reverse_mnemonic
+from mnemonic.mnemonic import POSSIBLE_ENT_VALUES, generate_entropy_bytes, get_mnemonic_from_entropy_bytes, \
+    reverse_mnemonic
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="User interface showcasing the mnemonics library.")
@@ -62,5 +63,3 @@ if __name__ == "__main__":
     # print help
     else:
         parser.parse_args(["--help"])
-
-

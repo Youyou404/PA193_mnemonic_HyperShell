@@ -5,6 +5,7 @@ disable=invalid-name,
         missing-class-docstring,
         missing-function-docstring,
         unidiomatic-typecheck,
+        no-member,
 
 [FORMAT]
 max-line-length=120

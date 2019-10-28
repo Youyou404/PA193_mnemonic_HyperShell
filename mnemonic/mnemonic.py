@@ -1,4 +1,5 @@
 from hashlib import sha256
+import os
 
 POSSIBLE_ENT_VALUES = [128, 160, 192, 224, 256]
 
@@ -246,7 +247,5 @@ def reverse_mnemonic(mnemonic, filepath):
 
 
 if __name__ == "__main__":
-    import os
-
     wordlist_path = os.path.join(os.path.dirname(__file__), "../../wordlists/english.txt")
     print(generate_mnemonic(128, wordlist_path))

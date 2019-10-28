@@ -1,6 +1,5 @@
 language: python
 python:
-    - "2.7"
     - "3.7"
 
 before_install:
@@ -8,7 +7,7 @@ before_install:
     - sudo apt-get install python3-pip
 
 install:
-    - sudo pip3 install pylint
+    - sudo pip3 install pylint pbkdf2
 
 script:
     - pylint --rcfile=config/.pylintrc mnemonic/ tests/

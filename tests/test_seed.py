@@ -14,7 +14,7 @@ class SeedTest(unittest.TestCase):
             for v in json.loads(f.read())["english"]:
                 # test generate_seed
                 expected = v[2]
-                actual = generate_seed(v[1])
+                actual = generate_seed(v[1], 'TREZOR')
                 self.assertEqual(expected, actual)
 
 

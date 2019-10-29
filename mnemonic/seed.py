@@ -2,22 +2,7 @@ from hashlib import sha512
 import hmac
 import unicodedata
 from pbkdf2 import PBKDF2
-
-
-def get_wordlist(filepath):
-    """
-    Get list of words from the file. Each line is interpreted as a word (except the possibly empty last line).
-    """
-    with open(filepath, "r") as f:
-        wordlist = f.read().split("\n")
-        if wordlist[-1] == "":
-            wordlist.pop(-1)
-
-        if len(wordlist) != 2048:
-            raise ValueError("the filepath contains {} lines interpreted as words; "
-                             "it should contain 2048 words".format(len(wordlist)))
-
-        return wordlist
+from mnemonic.util import get_wordlist
 
 
 def generate_seed(mnemonic, passphrase='', filepath='../wordlists/english.txt'):
@@ -30,9 +15,9 @@ def generate_seed(mnemonic, passphrase='', filepath='../wordlists/english.txt'):
     """
 
     wordlist = get_wordlist(filepath)
-    splited_mnemonic = mnemonic.split()
-    for member in splited_mnemonic:
-        if(member not in wordlist):
+    split_mnemonic = mnemonic.split()
+    for member in split_mnemonic:
+        if member not in wordlist:
             raise ValueError("the given mnemonic contains illegal(s) word(s)")
 
     nfkd_mnemonic = bytes(unicodedata.normalize('NFKD', mnemonic), encoding='utf-8')

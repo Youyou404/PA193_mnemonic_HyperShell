@@ -3,6 +3,7 @@ import hmac
 import unicodedata
 from pbkdf2 import PBKDF2
 
+
 def get_wordlist(filepath):
     """
     Get list of words from the file. Each line is interpreted as a word (except the possibly empty last line).
@@ -18,6 +19,7 @@ def get_wordlist(filepath):
 
         return wordlist
 
+
 def generate_seed(mnemonic, passphrase='', filepath='../wordlists/english.txt'):
     """
     Get the seed from a mnemonic
@@ -29,7 +31,7 @@ def generate_seed(mnemonic, passphrase='', filepath='../wordlists/english.txt'):
 
     wordlist = get_wordlist(filepath)
     splited_mnemonic = mnemonic.split()
-    for i in range(0,len(splited_mnemonic)):
+    for i in range(0, len(splited_mnemonic)):
         if(splited_mnemonic[i] not in wordlist):
             raise ValueError("the given mnemonic contains illegal(s) word(s)")
 

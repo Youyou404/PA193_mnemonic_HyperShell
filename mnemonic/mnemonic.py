@@ -3,6 +3,7 @@ from hashlib import sha256
 
 POSSIBLE_ENT_VALUES = [128, 160, 192, 224, 256]
 
+
 def generate_entropy_bytes(ent):
     """
     Generate ent cryptographically secure bytes.

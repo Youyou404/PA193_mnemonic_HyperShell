@@ -1,12 +1,7 @@
 import os
-from hashlib import sha256, sha512
-import hmac
-import unicodedata
-from pbkdf2 import PBKDF2
-
+from hashlib import sha256
 
 POSSIBLE_ENT_VALUES = [128, 160, 192, 224, 256]
-
 
 def generate_entropy_bytes(ent):
     """
@@ -248,24 +243,6 @@ def reverse_mnemonic(mnemonic, filepath):
     bit_string = bit_string[:len(bit_string) - cs]
 
     return int(bit_string, 2).to_bytes(length=len(bit_string) // 8, byteorder="big").hex()
-
-
-def generate_seed(mnemonic, passphrase='TREZOR'):
-    """
-    Get the seed from a mnemonic
-    :param mnemonic: mnemonic as a string
-    :param passphrase: passphrase as a string
-    :return: seed as a hex string
-    """
-    nfkd_mnemonic = bytes(unicodedata.normalize('NFKD', mnemonic), encoding='utf-8')
-
-    concat = 'mnemonic' + passphrase
-    nfkd_salt = bytes(unicodedata.normalize('NFKD', concat), encoding='utf-8')
-
-    seed = PBKDF2(nfkd_mnemonic, nfkd_salt, 2048, macmodule=hmac, digestmodule=sha512).read(64).hex()
-
-    return seed
-
 
 if __name__ == "__main__":
     wordlist_path = os.path.join(os.path.dirname(__file__), "../../wordlists/english.txt")

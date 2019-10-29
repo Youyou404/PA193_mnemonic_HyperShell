@@ -28,11 +28,5 @@ class MnemonicTest(unittest.TestCase):
                 actual = reverse_mnemonic(v[1], wordlist_path)
                 self.assertEqual(expected, actual)
 
-                # test generate_seed
-                expected = v[2]
-                actual = generate_seed(v[1])
-                self.assertEqual(expected, actual)
-
-
 if __name__ == "__main__":
     unittest.main()

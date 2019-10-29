@@ -31,8 +31,8 @@ def generate_seed(mnemonic, passphrase='', filepath='../wordlists/english.txt'):
 
     wordlist = get_wordlist(filepath)
     splited_mnemonic = mnemonic.split()
-    for i in range(0, len(splited_mnemonic)):
-        if(splited_mnemonic[i] not in wordlist):
+    for member in splited_mnemonic:
+        if(member not in wordlist):
             raise ValueError("the given mnemonic contains illegal(s) word(s)")
 
     nfkd_mnemonic = bytes(unicodedata.normalize('NFKD', mnemonic), encoding='utf-8')

@@ -6,6 +6,7 @@ disable=invalid-name,
         missing-function-docstring,
         unidiomatic-typecheck,
         no-member,
+        duplicate-code,
 
 [FORMAT]
 max-line-length=120

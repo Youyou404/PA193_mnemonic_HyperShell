@@ -18,7 +18,7 @@ def get_wordlist(filepath):
 
         return wordlist
 
-def generate_seed(mnemonic, passphrase='TREZOR'):
+def generate_seed(mnemonic, passphrase=''):
     """
     Get the seed from a mnemonic
     :param mnemonic: mnemonic as a string

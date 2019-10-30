@@ -1,0 +1,12 @@
+[MESSAGE CONTROL]
+disable=invalid-name,
+        superfluous-parens,
+        missing-module-docstring,
+        missing-class-docstring,
+        missing-function-docstring,
+        unidiomatic-typecheck,
+        no-member,
+        duplicate-code,
+
+[FORMAT]
+max-line-length=120

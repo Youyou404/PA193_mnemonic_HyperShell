@@ -1,0 +1,16 @@
+language: python
+python:
+    - "3.7"
+
+before_install:
+    - sudo apt-get install flake8
+    - sudo apt-get install python3-pip
+
+install:
+    - pip3 install -r requirements.txt
+    - pip3 install pylint
+
+script:
+    - pylint --rcfile=config/.pylintrc mnemonic/ tests/
+    - flake8 --config=config/flake8 .
+    - python3 -m unittest discover tests

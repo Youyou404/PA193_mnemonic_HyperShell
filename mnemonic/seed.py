@@ -1,5 +1,4 @@
-from hashlib import sha512, pbkdf2_hmac
-import hmac
+from hashlib import pbkdf2_hmac
 import unicodedata
 from mnemonic.util import get_wordlist
 

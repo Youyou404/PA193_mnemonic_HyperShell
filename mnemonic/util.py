@@ -9,7 +9,7 @@ class WordList(object):
         self.length = len(wordlist)
 
         wordlist.sort()
-        for i in wordlist:
+        for i in range(self.length):
             word = wordlist[i]
             if not isinstance(word, str):
                 raise InvalidType(

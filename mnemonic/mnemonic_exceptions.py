@@ -13,3 +13,7 @@ class InvalidEntropyLength(ValueError):
 
 class IndexOutOfRange(ValueError):
     pass
+
+
+class InvalidMnemonicLength(ValueError):
+    pass

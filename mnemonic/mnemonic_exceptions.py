@@ -19,3 +19,7 @@ class InvalidMnemonicLength(ValueError):
 
 class DuplicateWords(ValueError):
     pass
+
+class UnknownWord(ValueError):
+    pass
+

@@ -1,5 +1,6 @@
 from .mnemonic_exceptions import (
-    InvalidWordlistLength, DuplicateWords, InvalidType
+    InvalidWordlistLength, DuplicateWords, InvalidType,
+    UnknownWord, IndexOutOfRange
 )
 
 class WordList(object):
@@ -26,9 +27,14 @@ class WordList(object):
             self.words[word] = i
     
     def index_of(self, word:str) -> int:
-        return self.words.get(word)
-    
+        r = self.words.get(word)
+        if r is None:
+            raise UnknownWord("Word {word} not in the wordlist".format(word=word))
+        return r
+
     def at_index(self, index:int) -> str:
+        if index >= self.length or -index > self.length:
+            raise IndexOutOfRange("Wordlist index {index} out of range".format(index=index))
         return self.indices[index]
     
     def __contains__(self, item):

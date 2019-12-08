@@ -126,20 +126,17 @@ def compose_mnemonic(indices, wordlist):
     Compose the mnemonic from the given wordlist using its indices.
 
     :param indices: list of ints with values between 0 and 2047
-    :param wordlist: list of 2048 strings
+    :param wordlist: wordlist of 2048 strings
     :return: mnemonic
     """
     for i in indices:
         if type(i) is not int or not (0 <= i <= 2047):
             raise IndexOutOfRange(
                 'indices has to contain ints with values between 0 and 2047; the given indices were {}'.format(indices))
-    for w in wordlist:
-        if type(w) is not str:
-            raise InvalidType('wordlist has to contain only strings; the given wordlist was {}'.format(wordlist))
     if len(wordlist) != 2048:
         raise InvalidWordlistLength('wordlist has to have length 2048; the given wordlists had length {}'.format(len(wordlist)))
 
-    mnemonic_list = [wordlist[i] for i in indices]
+    mnemonic_list = [wordlist.at_index(i) for i in indices]
     mnemonic = ' '.join(mnemonic_list)
     return mnemonic
 
@@ -224,7 +221,7 @@ def reverse_mnemonic(mnemonic, filepath):
     wordlist = get_wordlist(filepath)
     if len(wordlist) != 2048:
         raise InvalidWordlistLength('the wordlist has to have 2048 words; the given wordlist had {} words'.format(len(wordlist)))
-    indices = [wordlist.index(w) for w in mnemonic_list]
+    indices = [wordlist.index_of(w) for w in mnemonic_list]
 
     indices_bytes = [i.to_bytes(length=2, byteorder='big') for i in indices]
 

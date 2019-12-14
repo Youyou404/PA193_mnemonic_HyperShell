@@ -2,6 +2,8 @@ from hashlib import pbkdf2_hmac
 import unicodedata
 from mnemonic.util import get_wordlist
 
+from .mnemonic_exceptions import IllegalWord
+
 
 def generate_seed(mnemonic, passphrase='', filepath='../wordlists/english.txt'):
     """
@@ -16,7 +18,7 @@ def generate_seed(mnemonic, passphrase='', filepath='../wordlists/english.txt'):
     split_mnemonic = mnemonic.split()
     for member in split_mnemonic:
         if member not in wordlist:
-            raise ValueError("the given mnemonic contains illegal(s) word(s)")
+            raise IllegalWord("the given mnemonic contains illegal(s) word(s)")
 
     nfkd_mnemonic = bytes(unicodedata.normalize('NFKD', mnemonic), encoding='utf-8')
     concat = 'mnemonic' + passphrase

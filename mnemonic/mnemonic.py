@@ -2,6 +2,11 @@ import os
 from hashlib import sha256
 from mnemonic.util import get_wordlist
 
+from .mnemonic_exceptions import (
+    InvalidEntropyLength, InvalidType, InvalidWordlistLength,
+    InvalidEntropyLength, IndexOutOfRange, InvalidMnemonicLength
+)
+
 POSSIBLE_ENT_VALUES = [128, 160, 192, 224, 256]
 
 
@@ -13,9 +18,9 @@ def generate_entropy_bytes(ent):
     :return: bytes object of entropy
     """
     if type(ent) is not int:
-        raise ValueError('ent (entropy length) has to be int; the given type was {}'.format(type(ent)))
+        raise InvalidType('ent (entropy length) has to be int; the given type was {}'.format(type(ent)))
     if ent not in POSSIBLE_ENT_VALUES:
-        raise ValueError(
+        raise InvalidEntropyLength(
             'ent (entropy length) has to be in {}; the given values was {}'.format(POSSIBLE_ENT_VALUES, ent))
 
     entropy_bytes = os.urandom(ent // 8)
@@ -41,7 +46,7 @@ def bytes_to_bits(value_bytes):
     Convert bytes to bit string.
     """
     if type(value_bytes) is not bytes:
-        raise ValueError('value_bytes has to be bytes object; the given type was {}'.format(type(value_bytes)))
+        raise InvalidType('value_bytes has to be bytes object; the given type was {}'.format(type(value_bytes)))
 
     value_bits = ''.join(format(x, '08b') for x in value_bytes)
 
@@ -55,9 +60,9 @@ def get_checksum(entropy_bytes):
     Get checksum bit string for the entropy bytes.
     """
     if type(entropy_bytes) is not bytes:
-        raise ValueError('entropy_bytes has to be bytes object; the given type was {}'.format(type(entropy_bytes)))
+        raise InvalidType('entropy_bytes has to be bytes object; the given type was {}'.format(type(entropy_bytes)))
     if len(entropy_bytes) * 8 not in POSSIBLE_ENT_VALUES:
-        raise ValueError(
+        raise InvalidEntropyLength(
             'eight multiple of entropy_bytes length has to be in {}; '
             'the eight multiple of length of the given values was {}'.format(
                 POSSIBLE_ENT_VALUES, 8 * len(entropy_bytes)))
@@ -78,9 +83,9 @@ def get_indices_from_entropy(entropy_bytes):
     :return: list of indices (values 0 to 2047)
     """
     if type(entropy_bytes) is not bytes:
-        raise ValueError('entropy_bytes has to be bytes object; the given type was {}'.format(type(entropy_bytes)))
+        raise InvalidType('entropy_bytes has to be bytes object; the given type was {}'.format(type(entropy_bytes)))
     if len(entropy_bytes) * 8 not in POSSIBLE_ENT_VALUES:
-        raise ValueError(
+        raise InvalidEntropyLength(
             'eight multiple of entropy_bytes length has to be in {}; '
             'the eight multiple of length of the given values was {}'.format(
                 POSSIBLE_ENT_VALUES, 8 * len(entropy_bytes)))
@@ -108,9 +113,9 @@ def generate_indices(ent):
     :return: list of indices (values 0 to 2047)
     """
     if type(ent) is not int:
-        raise ValueError('ent (entropy length) has to be int; the given type was {}'.format(type(ent)))
+        raise InvalidType('ent (entropy length) has to be int; the given type was {}'.format(type(ent)))
     if ent not in POSSIBLE_ENT_VALUES:
-        raise ValueError(
+        raise InvalidEntropyLength(
             'ent (entropy length) has to be in {}; the given values was {}'.format(POSSIBLE_ENT_VALUES, ent))
 
     return get_indices_from_entropy(generate_entropy_bytes(ent))
@@ -121,20 +126,17 @@ def compose_mnemonic(indices, wordlist):
     Compose the mnemonic from the given wordlist using its indices.
 
     :param indices: list of ints with values between 0 and 2047
-    :param wordlist: list of 2048 strings
+    :param wordlist: wordlist of 2048 strings
     :return: mnemonic
     """
     for i in indices:
         if type(i) is not int or not (0 <= i <= 2047):
-            raise ValueError(
+            raise IndexOutOfRange(
                 'indices has to contain ints with values between 0 and 2047; the given indices were {}'.format(indices))
-    for w in wordlist:
-        if type(w) is not str:
-            raise ValueError('wordlist has to contain only strings; the given wordlist was {}'.format(wordlist))
     if len(wordlist) != 2048:
-        raise ValueError('wordlist has to have length 2048; the given wordlists had length {}'.format(len(wordlist)))
+        raise InvalidWordlistLength('wordlist has to have length 2048; the given wordlists had length {}'.format(len(wordlist)))
 
-    mnemonic_list = [wordlist[i] for i in indices]
+    mnemonic_list = [wordlist.at_index(i) for i in indices]
     mnemonic = ' '.join(mnemonic_list)
     return mnemonic
 
@@ -148,9 +150,9 @@ def get_mnemonic_from_entropy_bytes(entropy_bytes, filepath):
     :return: mnemonic
     """
     if type(entropy_bytes) is not bytes:
-        raise ValueError('entropy_bytes has to be bytes object; the given type was {}'.format(type(entropy_bytes)))
+        raise InvalidType('entropy_bytes has to be bytes object; the given type was {}'.format(type(entropy_bytes)))
     if len(entropy_bytes) * 8 not in POSSIBLE_ENT_VALUES:
-        raise ValueError(
+        raise InvalidEntropyLength(
             'eight multiple of entropy_bytes length has to be in {}; '
             'the eight multiple of length of the given values was {}'.format(
                 POSSIBLE_ENT_VALUES, 8 * len(entropy_bytes)))
@@ -170,9 +172,9 @@ def get_mnemonic_from_entropy_hex(entropy_hex, filepath):
     try:
         int(entropy_hex, 16)
     except ValueError:
-        raise ValueError('the given entropy is not a hex string; the given value was {}'.format(entropy_hex))
+        raise InvalidType('the given entropy is not a hex string; the given value was {}'.format(entropy_hex))
     if len(entropy_hex) * 4 not in POSSIBLE_ENT_VALUES:
-        raise ValueError(
+        raise InvalidEntropyLength(
             'four multiple of entropy hex string has to be in {}; '
             'the four multiple of the length of the given value was {}'.format(
                 POSSIBLE_ENT_VALUES, 4 * len(entropy_hex)))
@@ -190,9 +192,9 @@ def generate_mnemonic(ent, filepath):
     :return: mnemonic
     """
     if type(ent) is not int:
-        raise ValueError('ent (entropy length) has to be int; the given type was {}'.format(type(ent)))
+        raise InvalidType('ent (entropy length) has to be int; the given type was {}'.format(type(ent)))
     if ent not in POSSIBLE_ENT_VALUES:
-        raise ValueError(
+        raise InvalidEntropyLength(
             'ent (entropy length) has to be in {}; the given values was {}'.format(POSSIBLE_ENT_VALUES, ent))
 
     mnemonic = compose_mnemonic(generate_indices(ent), get_wordlist(filepath))
@@ -208,18 +210,18 @@ def reverse_mnemonic(mnemonic, filepath):
     :return: entropy as a hex string
     """
     if type(mnemonic) is not str:
-        raise ValueError('mnemonic has to be a string; the given type was {}'.format(type(mnemonic)))
+        raise InvalidType('mnemonic has to be a string; the given type was {}'.format(type(mnemonic)))
 
     mnemonic_list = mnemonic.split(' ')
     possible_ms_values = [x // 32 * 33 // 11 for x in POSSIBLE_ENT_VALUES]
     if len(mnemonic_list) not in possible_ms_values:
-        raise ValueError('number of words in the mnemonic has to be in {}; the given number of words was {}'.format(
+        raise InvalidMnemonicLength('number of words in the mnemonic has to be in {}; the given number of words was {}'.format(
             possible_ms_values, len(mnemonic_list)))
 
     wordlist = get_wordlist(filepath)
     if len(wordlist) != 2048:
-        raise ValueError('the wordlist has to have 2048 words; the given wordlist had {} words'.format(len(wordlist)))
-    indices = [wordlist.index(w) for w in mnemonic_list]
+        raise InvalidWordlistLength('the wordlist has to have 2048 words; the given wordlist had {} words'.format(len(wordlist)))
+    indices = [wordlist.index_of(w) for w in mnemonic_list]
 
     indices_bytes = [i.to_bytes(length=2, byteorder='big') for i in indices]
 

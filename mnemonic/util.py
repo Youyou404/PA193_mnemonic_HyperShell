@@ -11,4 +11,7 @@ def get_wordlist(filepath):
             raise ValueError('the filepath contains {} lines interpreted as words; '
                              'it should contain 2048 words'.format(len(wordlist)))
 
+        if len(set(wordlist)) != 2048:
+            raise ValueError('the filepath contains duplicate words')
+
         return wordlist

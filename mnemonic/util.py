@@ -11,4 +11,9 @@ def get_wordlist(filepath):
             raise ValueError('the filepath contains {} lines interpreted as words; '
                              'it should contain 2048 words'.format(len(wordlist)))
 
+        for word in wordlist:
+            if ' ' in word:
+                raise ValueError('the filepath contains line containing space character,'
+                                 'that is reserved for word splitting:' + word)
+
         return wordlist
